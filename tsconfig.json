@@ -6,6 +6,8 @@
     "paths": {
       "@/*":["src/*"]
     },
+    
+
     "suppressImplicitAnyIndexErrors":true,
 
     "target": "ESNext",
@@ -24,6 +26,8 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src","./**/*.ts"],
+  "exclude": ["node_modules/**/*"],
+
   "references": [{ "path": "./tsconfig.node.json" }]
 }

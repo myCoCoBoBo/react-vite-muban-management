@@ -12,6 +12,9 @@ export default {
             }
             
         }
-    }
+    },
+    //名字统一管理
+    add1:"add1",
+    add2:"add2",
 
 }
