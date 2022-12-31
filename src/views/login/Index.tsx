@@ -5,8 +5,6 @@ import { Space, Input, Button, message } from 'antd';
 import  './login.less'
 import {useSelector,useDispatch} from "react-redux"
 //import { Store } from 'antd/es/form/interface';
-
-
 export default function Index() {
     useEffect(() => {
         initLoginBg();
@@ -40,11 +38,19 @@ export default function Index() {
     }
 
     //获取redux仓库数据
-    const {num}=useSelector((state:RootState)=>(
-        { num:state.num}
-    ))
+    const {num}=useSelector((state:RootState)=>{
+        console.log("state",state.NumReducer.num);
+        
+        return { num:state.NumReducer.num}
+    })
+    const {sarr}=useSelector((state:RootState)=>{
+        console.log("state",state.ArrReducer.sarr);
+        
+        return { sarr:state.ArrReducer.sarr}
+    })
     
     //修改仓库数据
+    //对数字的操作
     const dispatch=useDispatch()
         const xiugai=()=>{
             dispatch({
@@ -52,13 +58,25 @@ export default function Index() {
                 payload:10
             })
         }
+    //对数组的操作
+  
+        const xiugaiArr=()=>{
+            dispatch({
+                type:"sarrPush",
+                payload:10
+            })
+            console.log("sarr,",sarr);
+        }
+
+    
 
     return (
         <div className={style.loginPage}>
             {/* 存放背景 */}
             <canvas id="canvas" style={{ display: "block" }}></canvas>
             <div className={style.loginBox + " loginbox"}>
-                <h1 onClick={xiugai}>仓库数据{num} </h1>
+                <h1 onClick={xiugai}>数字{num} </h1>
+                <h1 onClick={xiugaiArr}>数组{sarr} </h1>
                 {/* 标题部分 */}
                 <div className={style.title}>
                     <h1>前端&nbsp;·&nbsp;通用后台系统</h1>
