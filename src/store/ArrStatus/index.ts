@@ -1,4 +1,4 @@
-export default {
+const store= {
     state:{
         sarr:[10,20,30],
     },
@@ -8,7 +8,10 @@ export default {
         },
     },
     //名字统一管理
-    sarrPush:"sarrPush",
-    
+    actionNames:{}
 
 }
+for (const key in store.actions) {
+    store.actionNames[key]=key
+}
+export default store
