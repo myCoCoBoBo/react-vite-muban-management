@@ -1,5 +1,5 @@
 import request from "./index"
-
+import {CaptchaAPIRes,LoginAPIReq,LoginAPIRes} from "@/types/api"
 // 请求中： 请求参数和返回值的类型都需要进行约束
 
 // 验证码请求

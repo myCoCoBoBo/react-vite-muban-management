@@ -2,13 +2,16 @@ import React, { ChangeEvent, useEffect,useState } from 'react'
 import style from './login.module.scss'
 import initLoginBg from "./init"
 import { Space, Input, Button, message } from 'antd';
+import {useNavigate,useLocation} from "react-router-dom"
 import  './login.less'
 import numStatus from "@/store/NumStatus/index"
 import {useSelector,useDispatch} from "react-redux"
 //import { Store } from 'antd/es/form/interface';
-import {CaptchaAPI} from "@/request/api"
+import {CaptchaAPI,LoginAPI} from "@/request/api"
 export default function Index() {
     const [messageApi, contextHolder] = message.useMessage();
+    const navigateTo=useNavigate()
+    const location=useLocation()
     useEffect(() => {
         initLoginBg();
         window.onresize = function () { initLoginBg() }
@@ -30,15 +33,40 @@ export default function Index() {
     }
     //获取验证码
     const [captchaVal,setCaptchaVal]=useState("")
+    const [uuid,setUuid]=useState("")
     const captchaChange=(e:ChangeEvent<HTMLInputElement>)=>{
+        //1/.把图片数据显示在img上
         console.log("验证码",e.target.value);
         setCaptchaVal(e.target.value)
+        
     }
 
     //点击登录按钮
     const clickLogin=()=>{
         console.log(usernameVal,passwordVal,captchaVal);
-        
+        if(!usernameVal.trim()||!passwordVal.trim()||!captchaVal.trim()){
+            messageApi.error("请输入完整信息")
+        }else{
+            const params={
+                username:usernameVal,
+                password:passwordVal,
+                uuid,
+                code:captchaVal
+            }
+            LoginAPI(params).then(res=>{
+                if(res.code==200){
+                    messageApi.success("登录成功！")
+                    localStorage.setItem('vite-management-token',res.token)
+                    console.log("location",location);
+                    
+                    navigateTo('/page1')
+                    localStorage.removeItem("uuid")
+
+                }else{
+                    messageApi.error(res.msg) 
+                }
+                
+            })}
     }
     //获取验证码
     const [img,setImg]=useState("")
@@ -47,6 +75,11 @@ export default function Index() {
             if(res.code==200){
                 messageApi.success(res.msg);
                 setImg("data:image/gif;base64,"+res.img)
+                //2.保存uuid
+                localStorage.setItem("uuid",res.uuid)
+                setUuid(res.uuid)
+                console.log("uuid",uuid);
+                
             }
             
         }).catch(err=>{
